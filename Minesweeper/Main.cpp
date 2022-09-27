@@ -4,6 +4,7 @@ using namespace std;
 #include <SFML/Graphics.hpp>
 #include "InitializeBoard.h"
 #include <cmath>
+#include "FloodFill.h"
 
 const int boardHeight = 16;
 const int boardWidth = 16;
@@ -17,6 +18,13 @@ int main()
     sf::RenderWindow window(sf::VideoMode(17*boardHeight, 17*boardWidth), "Minesweeper");
 
     vector<vector<int>> board;
+    
+    vector<vector<int>> hidden;
+    hidden.resize(boardHeight);
+
+    for (int i = 0; i < boardHeight; ++i) {
+        hidden[i].resize(boardWidth);
+    }
 
     board = InitializeBoard(board);
 
@@ -57,10 +65,29 @@ int main()
 
                     if (mouseY < 16 && mouseX < 16 && mouseY > -1 && mouseX > -1) {
                         numberInSquare = board[mouseX][mouseY];
+                        hidden[mouseX][mouseY] = 1;
                     }
 
                     if (numberInSquare == 0) {
-                        sprite[mouseX][mouseY].setTextureRect(sf::IntRect(17, 49, 17, 17));
+                        FloodFill(board, hidden, mouseX, mouseY);
+                        hidden[mouseX][mouseY] = 0;
+                        cout << "Flood";
+
+                        for (int i = 0; i < boardHeight; ++i) {
+                            for (int j = 0; j < boardWidth; ++j) {
+                                if (hidden[i][j] == 1) {
+                                    if (numberInSquare == 0) {
+                                        sprite[mouseX][mouseY].setTextureRect(sf::IntRect(17, 49, 17, 17));
+                                    }
+                                    else if (numberInSquare == 9) {
+                                        sprite[mouseX][mouseY].setTextureRect(sf::IntRect(102, 49, 17, 17));
+                                    }
+                                    else if (numberInSquare < 9) {
+                                        sprite[mouseX][mouseY].setTextureRect(sf::IntRect(17 * (numberInSquare - 1), 66, 17, 17));
+                                    }
+                                }
+                            }
+                        }
                     }
                     else if (numberInSquare == 9) {
                         sprite[mouseX][mouseY].setTextureRect(sf::IntRect(102, 49, 17, 17));
