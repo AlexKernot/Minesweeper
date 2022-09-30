@@ -6,7 +6,7 @@ using namespace std;
 
 bool BoundCheck(int i);
 
-vector<vector<int>> InitializeBoard(vector<vector<int>> board) {
+vector<vector<int>> InitializeBoard(vector<vector<int>> board, int posX, int posY) {
 
 	mt19937 rand(time(nullptr));
 	std::uniform_int_distribution<int> distribution(1, boardSize);
@@ -15,8 +15,8 @@ vector<vector<int>> InitializeBoard(vector<vector<int>> board) {
 
 	int x = 0;
 	int y = 0;
-	int startingX = 0;
-	int startingY = 0;
+	int startingX = posX;
+	int startingY = posY;
 
 	newBoard.resize(boardSize);
 	for (int i = 0; i < newBoard.size(); ++i) {
@@ -33,6 +33,30 @@ vector<vector<int>> InitializeBoard(vector<vector<int>> board) {
 		y = distribution(rand) - 1;
 
 		if (x == startingX && y == startingY) {
+			--i;
+			continue;
+		}
+		if (x == startingX - 1 && y == startingY) {
+			--i;
+			continue;
+		}
+		if (x == startingX - 1 && y == startingY - 1) {
+			--i;
+			continue;
+		}
+		if (x == startingX + 1 && y == startingY) {
+			--i;
+			continue;
+		}
+		if (x == startingX + 1 && y == startingY + 1) {
+			--i;
+			continue;
+		}
+		if (x == startingX && y == startingY - 1) {
+			--i;
+			continue;
+		}
+		if (x == startingX && y == startingY + 1) {
 			--i;
 			continue;
 		}

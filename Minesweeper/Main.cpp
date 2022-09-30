@@ -11,6 +11,7 @@ const int boardWidth = 16;
 
 int main()
 {
+    bool running = false;
     int mouseX = 0;
     int mouseY = 0;
     int numberInSquare = 0;
@@ -25,8 +26,6 @@ int main()
     for (int i = 0; i < boardHeight; ++i) {
         hidden[i].resize(boardWidth);
     }
-
-    board = InitializeBoard(board);
 
     sf::Texture texture;
     if (!texture.loadFromFile("sprites.png")) {
@@ -54,6 +53,18 @@ int main()
 
             if (event.type == sf::Event::MouseButtonPressed)
             {
+                if (event.mouseButton.button == sf::Mouse::Left && !running) {
+
+                    mouseX = event.mouseButton.x;
+                    mouseX = floor(mouseX / 17);
+
+                    mouseY = event.mouseButton.y;
+                    mouseY = floor(mouseY / 17);
+
+                    board = InitializeBoard(board, mouseX, mouseY);
+                    running = true;
+                }
+
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
                     numberInSquare = 10;
@@ -69,24 +80,32 @@ int main()
                     }
 
                     if (numberInSquare == 0) {
-                        FloodFill(board, hidden, mouseX, mouseY);
                         hidden[mouseX][mouseY] = 0;
-                        cout << "Flood";
+                        hidden = FloodFill(board, hidden, mouseX, mouseY);
+                        cout << "Flood\n";
 
                         for (int i = 0; i < boardHeight; ++i) {
                             for (int j = 0; j < boardWidth; ++j) {
                                 if (hidden[i][j] == 1) {
+                                    numberInSquare = board[i][j];
                                     if (numberInSquare == 0) {
-                                        sprite[mouseX][mouseY].setTextureRect(sf::IntRect(17, 49, 17, 17));
+                                        sprite[i][j].setTextureRect(sf::IntRect(17, 49, 17, 17));
                                     }
                                     else if (numberInSquare == 9) {
-                                        sprite[mouseX][mouseY].setTextureRect(sf::IntRect(102, 49, 17, 17));
+                                        sprite[i][j].setTextureRect(sf::IntRect(102, 49, 17, 17));
                                     }
                                     else if (numberInSquare < 9) {
-                                        sprite[mouseX][mouseY].setTextureRect(sf::IntRect(17 * (numberInSquare - 1), 66, 17, 17));
+                                        sprite[i][j].setTextureRect(sf::IntRect(17 * (numberInSquare - 1), 66, 17, 17));
                                     }
                                 }
                             }
+                        }
+
+                        for (int i = 0; i < boardHeight; ++i) {
+                            for (int j = 0; j < boardWidth; ++j) {
+                                cout << hidden[i][j] << " ";
+                            }
+                            cout << "\n";
                         }
                     }
                     else if (numberInSquare == 9) {
@@ -94,6 +113,7 @@ int main()
                     }
                     else if (numberInSquare < 9) {
                         sprite[mouseX][mouseY].setTextureRect(sf::IntRect(17 * (numberInSquare - 1), 66, 17, 17));
+                        hidden[mouseX][mouseY] = 1;
                     }
                 }
             }
