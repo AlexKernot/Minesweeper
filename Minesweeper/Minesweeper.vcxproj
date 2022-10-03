@@ -136,11 +136,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="FloodFill.cpp" />
+    <ClCompile Include="GameBoardClass.cpp" />
     <ClCompile Include="InitializeBoard.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FloodFill.h" />
+    <ClInclude Include="GameBoardClass.h" />
     <ClInclude Include="InitializeBoard.h" />
     <ClInclude Include="Main.h" />
   </ItemGroup>

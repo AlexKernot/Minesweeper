@@ -4,34 +4,34 @@ using namespace std;
 #include "FloodFill.h"
 #include "InitializeBoard.h"
 #include <iostream>
+#include "Main.h"
+#include "GameBoardClass.h"
 
-vector<vector<int>> FloodFill(vector<vector<int>> board, vector<vector<int>> hidden, int pointX, int pointY) {
+bool FloodFill (GameBoard *board, int pointX, int pointY) {
 
-	static vector<vector<int>> hiding = hidden;
-
-	if (!BoundCheck(pointX) || !BoundCheck(pointY)) {
-		return hiding;
+	if (board -> getHidden(pointX, pointY) == -1) {
+		return true;
 	}
 
-	if (hidden[pointX][pointY] == 1) {
-		return hiding;
+	if (board -> getHidden(pointX, pointY) == 1) {
+		return true;
 	}
 
-	if (board[pointX][pointY] > 0) {
-		hiding[pointX][pointY] = 1;
-		return hiding;
+	if (board -> getBoard(pointX, pointY)> 0) {
+		board -> setHidden(pointX, pointY, 1);
+		return true;
 	}
 
-	hiding[pointX][pointY] = 1;
+	board -> setHidden(pointX, pointY, 1);
 
-	FloodFill(board, hiding, pointX + 1, pointY);
-	FloodFill(board, hiding, pointX + 1, pointY + 1);
-	FloodFill(board, hiding, pointX, pointY + 1);
-	FloodFill(board, hiding, pointX - 1, pointY + 1);
-	FloodFill(board, hiding, pointX - 1, pointY);
-	FloodFill(board, hiding, pointX, pointY - 1);
-	FloodFill(board, hiding, pointX - 1, pointY - 1);
-	FloodFill(board, hiding, pointX + 1, pointY - 1);
+	FloodFill(board, pointX + 1, pointY);
+	FloodFill(board, pointX + 1, pointY + 1);
+	FloodFill(board, pointX, pointY + 1);
+	FloodFill(board, pointX - 1, pointY + 1);
+	FloodFill(board, pointX - 1, pointY);
+	FloodFill(board, pointX, pointY - 1);
+	FloodFill(board, pointX - 1, pointY - 1);
+	FloodFill(board, pointX + 1, pointY - 1);
 
-	return hiding;
+	return true;
 }
