@@ -8,8 +8,14 @@ using namespace std;
 
 bool InitializeBoard(GameBoard *board, int posX, int posY) {
 
+
+	if (numBombs > boardWidth * boardHeight - 9) {
+		cout << "Too many bombs";
+		return false;
+	}
 	mt19937 rand(time(nullptr));
-	std::uniform_int_distribution<int> distribution(1, boardSize);
+	std::uniform_int_distribution<int> distributionX(1, boardWidth);
+	std::uniform_int_distribution<int> distributionY(1, boardHeight);
 
 	int x = 0;
 	int y = 0;
@@ -17,8 +23,8 @@ bool InitializeBoard(GameBoard *board, int posX, int posY) {
 	int startingY = posY;
 
 	for (int i = 0; i < numBombs; ++i) {
-		x = distribution(rand) - 1;
-		y = distribution(rand) - 1;
+		x = distributionX(rand) - 1;
+		y = distributionY(rand) - 1;
 
 		if (x == startingX && y == startingY) {
 			--i;
@@ -71,15 +77,15 @@ bool InitializeBoard(GameBoard *board, int posX, int posY) {
 		board -> boardIncrement(x + 1, y);
 		board -> boardIncrement(x + 1, y + 1);
 	}
-	for (int i = 0; i < boardHeight; ++i) {
-		for (int j = 0; j < boardWidth; ++j) {
+	for (int i = 0; i < boardWidth; ++i) {
+		for (int j = 0; j < boardHeight; ++j) {
 			if (board -> getBoard(i, j) >= 9) {
 				board -> setBoard(i, j, 9);
 			}
 		}
 	}
-	for (int i = 0; i < boardHeight; ++i) {
-		for (int j = 0; j < boardWidth; ++j) {
+	for (int i = 0; i < boardWidth; ++i) {
+		for (int j = 0; j < boardHeight; ++j) {
 			cout << board -> getBoard(i, j) << " ";
 		}
 		cout << "\n";

@@ -3,4 +3,4 @@
 #include "Main.h"
 #include "GameBoardClass.h"
 
-bool FloodFill(GameBoard *board, int pointX, int pointY);
+int FloodFill(GameBoard *board, int pointX, int pointY);
